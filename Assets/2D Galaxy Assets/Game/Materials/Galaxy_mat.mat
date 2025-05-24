@@ -47,7 +47,9 @@ Material:
     - _Distfading: 68
     - _EnableExternalAlpha: 0
     - _Formuparam: 530
+    - _Glossiness: 0.5
     - _Iterations: 17
+    - _Metallic: 0
     - _Saturation: 85
     - _StepSize: 130
     - _Tile: 700
@@ -56,7 +58,7 @@ Material:
     - _Zoom: 800
     m_Colors:
     - _Center: {r: 1, g: 0.3, b: 0.5, a: 0}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 0.01015234, g: 0, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _Rotation: {r: 35, g: 25, b: 75, a: 0.1}
     - _Scroll: {r: 3, g: 1, b: 0.6, a: 0.01}
