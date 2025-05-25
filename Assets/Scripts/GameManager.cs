@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
+        uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
     }
 
     void Update()
@@ -20,7 +20,13 @@ public class GameManager : MonoBehaviour
                 Instantiate(player, new Vector3(0, 0, 0), Quaternion.identity);
                 gameOver = false;
 
-               
+                // ? Reiniciar spawn
+                GameObject spawnManager = GameObject.Find("SpawnManager");
+                if (spawnManager != null)
+                {
+                    spawnManager.GetComponent<SpawnManager>().StartSpawning();
+                }
+
                 uiManager.HideTitleScreen();
             }
         }

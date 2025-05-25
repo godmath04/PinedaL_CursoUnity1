@@ -26,6 +26,8 @@ public class SpawnManager : MonoBehaviour
         StartCoroutine(SpawnPowerUpRoutine());
     }
 
+    
+
     private IEnumerator SpawnEnemyRoutine()
     {
         while (!_stopSpawning)
@@ -47,5 +49,12 @@ public class SpawnManager : MonoBehaviour
             Vector3 spawnPos = new Vector3(randomX, _ySpawn, 0);
             Instantiate(powerUps[randomIndex], spawnPos, Quaternion.identity);
         }
+    }
+
+    public void StartSpawning()
+    {
+        _stopSpawning = false;
+        StartCoroutine(SpawnEnemyRoutine());
+        StartCoroutine(SpawnPowerUpRoutine());
     }
 }

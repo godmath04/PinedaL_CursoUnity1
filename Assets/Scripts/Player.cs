@@ -30,6 +30,7 @@ public class Player : MonoBehaviour
     private int _lives = 3;
 
     private UIManager _uiManager;
+    private GameManager _gameManager;
 
     void Start()
     {
@@ -39,6 +40,8 @@ public class Player : MonoBehaviour
         {
             _uiManager.UpdateLives(_lives);
         }
+
+        _gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     void Update()
@@ -133,6 +136,9 @@ public class Player : MonoBehaviour
             {
                 spawnManager.GetComponent<SpawnManager>().StopSpawning();
             }
+            _gameManager.gameOver = true;
+            _uiManager.ShowTitleScreen();
+
 
             Destroy(this.gameObject);
         }
