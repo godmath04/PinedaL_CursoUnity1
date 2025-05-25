@@ -31,7 +31,7 @@ public class Powerup : MonoBehaviour
                 }
                 else if (powerUPID == 2)
                 {
-                    // Aquí puedes implementar otro efecto
+                    player.ActivateShield(5f); // Escudo activo por 5 segundos
                 }
 
                 Destroy(this.gameObject);

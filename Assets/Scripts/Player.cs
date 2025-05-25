@@ -4,12 +4,19 @@ using System.Collections;
 public class Player : MonoBehaviour
 {
     public bool canTripleShot = false;
+    public bool shieldsActive = false;
 
     [SerializeField]
     private GameObject _laserPrefab;
 
     [SerializeField]
     private GameObject _tripleShotPrefab;
+
+    [SerializeField]
+    private GameObject _explosionPrefab;
+    [SerializeField]
+    private GameObject _shieldGameObject;
+
 
     [SerializeField]
     private float _fireRate = 0.25f;
@@ -83,6 +90,12 @@ public class Player : MonoBehaviour
 
     public void TakeDamage()
     {
+        if (shieldsActive)
+        {
+            Debug.Log("¡Daño bloqueado por el escudo!");
+            return;
+        }
+
         _lives--;
 
         Debug.Log("Vida restante: " + _lives);
@@ -90,9 +103,25 @@ public class Player : MonoBehaviour
         if (_lives <= 0)
         {
             Debug.Log("Juego terminado");
-            Time.timeScale = 0; // Detiene el juego
-            Destroy(this.gameObject); // Destruye al jugador (opcional)
+            Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+            Destroy(this.gameObject);
         }
+    }
+
+    public void ActivateShield(float duration)
+    {
+        StartCoroutine(ShieldCooldown(duration));
+    }
+
+    private IEnumerator ShieldCooldown(float duration)
+    {
+        shieldsActive = true;
+        _shieldGameObject.SetActive(true);
+        Debug.Log("¡Escudo activado!");
+        yield return new WaitForSeconds(duration);
+        shieldsActive = false;
+        _shieldGameObject.SetActive(false);
+        Debug.Log("Escudo desactivado");
     }
 
 
