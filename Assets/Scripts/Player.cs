@@ -14,9 +14,9 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private GameObject _explosionPrefab;
+
     [SerializeField]
     private GameObject _shieldGameObject;
-
 
     [SerializeField]
     private float _fireRate = 0.25f;
@@ -61,7 +61,6 @@ public class Player : MonoBehaviour
         }
     }
 
-
     public void ActivateTripleShot(float duration)
     {
         StartCoroutine(TripleShotCooldown(duration));
@@ -87,6 +86,21 @@ public class Player : MonoBehaviour
         _speed = originalSpeed;
     }
 
+    public void ActivateShield(float duration)
+    {
+        StartCoroutine(ShieldCooldown(duration));
+    }
+
+    private IEnumerator ShieldCooldown(float duration)
+    {
+        shieldsActive = true;
+        _shieldGameObject.SetActive(true);
+        Debug.Log("¡Escudo activado!");
+        yield return new WaitForSeconds(duration);
+        shieldsActive = false;
+        _shieldGameObject.SetActive(false);
+        Debug.Log("Escudo desactivado");
+    }
 
     public void TakeDamage()
     {
@@ -104,26 +118,17 @@ public class Player : MonoBehaviour
         {
             Debug.Log("Juego terminado");
             Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+
+            // ? Detener el spawn
+            GameObject spawnManager = GameObject.Find("SpawnManager");
+            if (spawnManager != null)
+            {
+                spawnManager.GetComponent<SpawnManager>().StopSpawning();
+            }
+
             Destroy(this.gameObject);
         }
     }
-
-    public void ActivateShield(float duration)
-    {
-        StartCoroutine(ShieldCooldown(duration));
-    }
-
-    private IEnumerator ShieldCooldown(float duration)
-    {
-        shieldsActive = true;
-        _shieldGameObject.SetActive(true);
-        Debug.Log("¡Escudo activado!");
-        yield return new WaitForSeconds(duration);
-        shieldsActive = false;
-        _shieldGameObject.SetActive(false);
-        Debug.Log("Escudo desactivado");
-    }
-
 
     private void Movement()
     {
