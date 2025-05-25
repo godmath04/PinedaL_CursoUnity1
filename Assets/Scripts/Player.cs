@@ -19,6 +19,9 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _speed = 5.0f;
 
+    [SerializeField]
+    private int _lives = 3;
+
     void Start()
     {
         transform.position = new Vector3(3, 0, 0);
@@ -64,13 +67,39 @@ public class Player : MonoBehaviour
         canTripleShot = false;
     }
 
+    public void ActivateSpeedBoost(float duration, float newSpeed)
+    {
+        StartCoroutine(SpeedBoostCooldown(duration, newSpeed));
+    }
+
+    private IEnumerator SpeedBoostCooldown(float duration, float newSpeed)
+    {
+        float originalSpeed = _speed;
+        _speed = newSpeed;
+        yield return new WaitForSeconds(duration);
+        _speed = originalSpeed;
+    }
+
+
+    public void TakeDamage()
+    {
+        _lives--;
+
+        Debug.Log("Vida restante: " + _lives);
+
+        if (_lives <= 0)
+        {
+            Debug.Log("Juego terminado");
+            Time.timeScale = 0; // Detiene el juego
+            Destroy(this.gameObject); // Destruye al jugador (opcional)
+        }
+    }
+
+
     private void Movement()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
-
-        // Debug para revisar si se está moviendo solo
-        Debug.Log("Horizontal: " + horizontalInput + " | Vertical: " + verticalInput);
 
         Vector3 movement = new Vector3(horizontalInput, verticalInput, 0) * _speed * Time.deltaTime;
         transform.Translate(movement);

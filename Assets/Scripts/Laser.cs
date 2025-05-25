@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+public class Laser : MonoBehaviour
 {
     [SerializeField]
     private float speed = 10.0f;
