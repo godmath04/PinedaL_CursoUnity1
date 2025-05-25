@@ -2,21 +2,46 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public float speed = 5.0f;
+    [SerializeField]
+    private float speed = 5.0f;
+
     void Start()
     {
-        transform.position = new Vector3(3, 0, 0); // Set initial position to origin
-
+        transform.position = new Vector3(3, 0, 0);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        float horizontalInput = Input.GetAxis("Horizontal"); 
-        float verticalInput = Input.GetAxis("Vertical"); 
-        transform.Translate(Vector3.right * speed * horizontalInput *Time.deltaTime); 
-        transform.Translate(Vector3.up * speed * verticalInput* Time.deltaTime); 
+        Movement();
+        
+    }
 
+    private void Movement()
+    {
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
+
+        Vector3 movement = new Vector3(horizontalInput, verticalInput, 0) * speed * Time.deltaTime;
+        transform.Translate(movement);
+
+        // Limitar movimiento vertical
+        if (transform.position.y < -4.2f)
+        {
+            transform.position = new Vector3(transform.position.x, -4.2f, 0);
+        }
+        else if (transform.position.y < 0)
+        {
+            transform.position = new Vector3(transform.position.x, 0f, 0);
+        }
+
+        // Movimiento horizontal con wrap-around
+        if (transform.position.x > 9.5f)
+        {
+            transform.position = new Vector3(-9.5f, transform.position.y, 0);
+        }
+        else if (transform.position.x < -9.5f)
+        {
+            transform.position = new Vector3(9.5f, transform.position.y, 0);
+        }
     }
 }
