@@ -29,9 +29,16 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int _lives = 3;
 
+    private UIManager _uiManager;
+
     void Start()
     {
         transform.position = new Vector3(3, 0, 0);
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        if (_uiManager != null)
+        {
+            _uiManager.UpdateLives(_lives);
+        }
     }
 
     void Update()
@@ -111,6 +118,7 @@ public class Player : MonoBehaviour
         }
 
         _lives--;
+        _uiManager.UpdateLives(_lives);
 
         Debug.Log("Vida restante: " + _lives);
 

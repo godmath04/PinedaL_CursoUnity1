@@ -13,6 +13,17 @@ public class Enemy : MonoBehaviour
     private float _resetY = 7.0f;
     private float _minY = -5.5f;
 
+    private UIManager _uiManager;
+
+    private void Start()
+    {
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        if (_uiManager == null)
+        {
+            Debug.LogError("UIManager is NULL.");
+        }
+        
+    }
     void Update()
     {
         transform.Translate(Vector3.down * _speed * Time.deltaTime);
@@ -30,6 +41,7 @@ public class Enemy : MonoBehaviour
         {
             Destroy(other.gameObject);
             Instantiate(_enemyExplotionPrefab, transform.position, Quaternion.identity);
+            _uiManager.UpdateScore();
             Destroy(gameObject);
         }
         else if (other.CompareTag("Player"))
