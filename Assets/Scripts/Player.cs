@@ -1,9 +1,15 @@
 using UnityEngine;
+using System.Collections;
 
 public class Player : MonoBehaviour
 {
+    public bool canTripleShot = false;
+
     [SerializeField]
     private GameObject _laserPrefab;
+
+    [SerializeField]
+    private GameObject _tripleShotPrefab;
 
     [SerializeField]
     private float _fireRate = 0.25f;
@@ -24,7 +30,7 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButton(0))
         {
-           Shoot(); ;
+            Shoot();
         }
     }
 
@@ -32,22 +38,43 @@ public class Player : MonoBehaviour
     {
         if (Time.time > _canFire)
         {
-            Instantiate(_laserPrefab, transform.position + new Vector3(0, 0.88f, 0), Quaternion.identity);
+            if (canTripleShot)
+            {
+                Instantiate(_tripleShotPrefab, transform.position, Quaternion.identity);
+            }
+            else
+            {
+                Instantiate(_laserPrefab, transform.position + new Vector3(0, 1.00f, 0), Quaternion.identity);
+            }
+
             _canFire = Time.time + _fireRate;
         }
-
     }
 
+
+    public void ActivateTripleShot(float duration)
+    {
+        StartCoroutine(TripleShotCooldown(duration));
+    }
+
+    private IEnumerator TripleShotCooldown(float duration)
+    {
+        canTripleShot = true;
+        yield return new WaitForSeconds(duration);
+        canTripleShot = false;
+    }
 
     private void Movement()
     {
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
+        // Debug para revisar si se está moviendo solo
+        Debug.Log("Horizontal: " + horizontalInput + " | Vertical: " + verticalInput);
+
         Vector3 movement = new Vector3(horizontalInput, verticalInput, 0) * _speed * Time.deltaTime;
         transform.Translate(movement);
 
-        // Limitar movimiento vertical
         if (transform.position.y < -4.2f)
         {
             transform.position = new Vector3(transform.position.x, -4.2f, 0);
@@ -57,7 +84,6 @@ public class Player : MonoBehaviour
             transform.position = new Vector3(transform.position.x, 0f, 0);
         }
 
-        // Movimiento horizontal con wrap-around
         if (transform.position.x > 9.5f)
         {
             transform.position = new Vector3(-9.5f, transform.position.y, 0);
